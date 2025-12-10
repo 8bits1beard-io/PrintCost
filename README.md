@@ -5,7 +5,7 @@
 A web-based tool for calculating the true cost of FDM 3D prints, including filament, electricity, printer depreciation, consumable wear, and more.
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
-![Version](https://img.shields.io/badge/version-1.0.0-green.svg)
+![Version](https://img.shields.io/badge/version-1.2.0-green.svg)
 ![No Dependencies](https://img.shields.io/badge/dependencies-Chart.js%20only-orange.svg)
 
 ---
@@ -23,6 +23,7 @@ A web-based tool for calculating the true cost of FDM 3D prints, including filam
 - **Print History** — Save and track all your print calculations
 - **Dashboard Analytics** — Visualize spending trends and cost breakdowns
 - **Privacy First** — All data stored locally in your browser, nothing sent to servers
+- **Dark Mode & Themes** — Light, Dark, and festive Christmas themes
 - **Accessible** — WCAG 2.1 Level AA compliant for keyboard and screen reader users
 - **No Installation** — Pure HTML/CSS/JS, runs in any modern browser
 
@@ -35,6 +36,10 @@ A web-based tool for calculating the true cost of FDM 3D prints, including filam
 5. Start calculating!
 
 ## Changelog
+
+### v1.2.0
+- Dark mode and Christmas theme with theme toggle
+- Theme preference saved to localStorage
 
 ### v1.1.0
 - Multi-filament support for multi-color prints
