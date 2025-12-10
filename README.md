@@ -33,6 +33,21 @@ A web-based tool for calculating the true cost of FDM 3D prints, including filam
 4. Add your printer(s) and filament(s)
 5. Start calculating!
 
+## Changelog
+
+### v1.0.0
+- Initial release
+- Cost calculator with filament, electricity, depreciation, consumables, labor, failure rate, and markup
+- G-code parsing for PrusaSlicer, Cura, SuperSlicer, OrcaSlicer, Bambu Studio
+- Printer presets for Bambu Lab, Prusa, Creality, Anycubic, Voron
+- Printer and filament profile management
+- Consumable tracking with wear indicators
+- Location-based electricity rates (50+ regions)
+- Print history and cost comparison tools
+- Dashboard with charts and analytics
+- Import/export data as JSON
+- WCAG 2.1 Level AA accessibility
+
 **Try it online:** [https://3dprintcost.pages.dev](https://3dprintcost.pages.dev)
 
 ## Cost Calculation
