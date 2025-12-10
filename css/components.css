@@ -768,6 +768,18 @@
   height: 8px;
 }
 
+.cost-breakdown__profit {
+  font-weight: var(--font-weight-semibold);
+}
+
+.cost-breakdown__profit--positive .cost-breakdown__value {
+  color: var(--color-success);
+}
+
+.cost-breakdown__profit--negative .cost-breakdown__value {
+  color: var(--color-error);
+}
+
 /* ==========================================================================
    Color Swatch
    ========================================================================== */

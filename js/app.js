@@ -546,11 +546,20 @@ const App = {
               </div>
             </div>
 
-            <div class="form-group">
-              <label class="form-label">Markup <span class="tooltip-icon" title="Profit margin percentage added on top of all costs. Use this when pricing prints for sale. 50% markup on a $10 cost = $15 price.">?</span></label>
-              <div class="input-group">
-                <input type="number" class="form-input" id="calc-markup" min="0" max="1000" step="1" value="0">
-                <span class="input-group__addon">%</span>
+            <div class="grid grid--2">
+              <div class="form-group">
+                <label class="form-label">Markup <span class="tooltip-icon" title="Profit margin percentage added on top of all costs. Use this when pricing prints for sale. 50% markup on a $10 cost = $15 price.">?</span></label>
+                <div class="input-group">
+                  <input type="number" class="form-input" id="calc-markup" min="0" max="1000" step="1" value="0">
+                  <span class="input-group__addon">%</span>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Selling Price <span class="tooltip-icon" title="Enter your intended selling price to see profit or loss. Leave at 0 to skip profit calculation.">?</span></label>
+                <div class="input-group">
+                  <span class="input-group__addon">$</span>
+                  <input type="number" class="form-input" id="calc-selling-price" min="0" step="0.01" value="0">
+                </div>
               </div>
             </div>
 
@@ -827,6 +836,7 @@ const App = {
           <span class="cost-breakdown__label">Total</span>
           <span class="cost-breakdown__value">${formatted.total}</span>
         </div>
+        ${this.getProfitLossHtml(result.total)}
       </div>
 
       <div class="mt-6">
@@ -839,6 +849,30 @@ const App = {
 
     // Render chart
     this.renderCostChart(result);
+  },
+
+  getProfitLossHtml(totalCost) {
+    const sellingPrice = Helpers.parseNumber(document.getElementById('calc-selling-price').value, 0);
+
+    if (sellingPrice <= 0) {
+      return '';
+    }
+
+    const profit = sellingPrice - totalCost;
+    const profitPercent = totalCost > 0 ? (profit / totalCost) * 100 : 0;
+    const isProfit = profit >= 0;
+
+    return `
+      <div class="cost-breakdown__divider"></div>
+      <div class="cost-breakdown__row">
+        <span class="cost-breakdown__label">Selling Price</span>
+        <span class="cost-breakdown__value">${CONFIG.formatCurrency(sellingPrice)}</span>
+      </div>
+      <div class="cost-breakdown__row cost-breakdown__profit ${isProfit ? 'cost-breakdown__profit--positive' : 'cost-breakdown__profit--negative'}">
+        <span class="cost-breakdown__label">${isProfit ? 'Profit' : 'Loss'} (${Formatters.percent(Math.abs(profitPercent))})</span>
+        <span class="cost-breakdown__value">${isProfit ? '+' : '-'}${CONFIG.formatCurrency(Math.abs(profit))}</span>
+      </div>
+    `;
   },
 
   renderCostChart(result) {
