@@ -44,13 +44,20 @@ class CostCalculation {
     // 1. Filament cost
     const filamentCost = filamentGrams * filament.getPricePerGram();
 
-    // 2. Electricity cost
-    const powerWatts = printer.powerConsumption.printing;
+    // 2. Electricity cost (includes AMS if attached)
+    let powerWatts = printer.powerConsumption.printing;
+    if (printer.hasAms && printer.ams) {
+      powerWatts += printer.ams.powerConsumption.working;
+    }
     const energyKwh = (powerWatts * printTimeHours) / 1000;
     const electricityCost = energyKwh * electricityRate;
 
     // 3. Printer depreciation
-    const depreciationCost = printer.getDepreciationPerHour() * printTimeHours;
+    const printerDepreciationCost = printer.getDepreciationPerHour() * printTimeHours;
+
+    // 3b. AMS depreciation (if attached)
+    const amsDepreciationCost = printer.getAmsDepreciationCost(printTimeMinutes);
+    const depreciationCost = printerDepreciationCost + amsDepreciationCost;
 
     // 4. Consumables allocation
     let consumablesCost = 0;
@@ -119,6 +126,11 @@ class CostCalculation {
           printerValue: printer.purchasePrice,
           lifetimeHours: printer.estimatedLifetimeHours,
           ratePerHour: printer.getDepreciationPerHour(),
+          printerCost: printerDepreciationCost,
+          amsValue: printer.ams?.purchasePrice || 0,
+          amsLifetimeHours: printer.ams?.estimatedLifetimeHours || 0,
+          amsRatePerHour: printer.getAmsDepreciationPerHour(),
+          amsCost: amsDepreciationCost,
           cost: depreciationCost,
         },
         consumables: {

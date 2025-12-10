@@ -123,6 +123,35 @@ const CONFIG = {
     'Metal-Fill': { density: 3.00, printTemp: { min: 190, max: 220 }, bedTemp: { min: 50, max: 60 } },
   },
 
+  // AMS presets (power in watts)
+  // Power specs from: https://wiki.bambulab.com/en/general/power-consumption
+  AMS_PRESETS: {
+    'ams': {
+      name: 'AMS',
+      manufacturer: 'Bambu Lab',
+      powerConsumption: { standby: 0.96, working: 5.78 },
+      estimatedLifetimeHours: 5000,
+    },
+    'ams-lite': {
+      name: 'AMS lite',
+      manufacturer: 'Bambu Lab',
+      powerConsumption: { standby: 0.96, working: 3.69 },
+      estimatedLifetimeHours: 5000,
+    },
+    'ams-2-pro': {
+      name: 'AMS 2 Pro',
+      manufacturer: 'Bambu Lab',
+      powerConsumption: { standby: 1, working: 12 },
+      estimatedLifetimeHours: 5000,
+    },
+    'ams-ht': {
+      name: 'AMS HT',
+      manufacturer: 'Bambu Lab',
+      powerConsumption: { standby: 2.5, working: 12 },
+      estimatedLifetimeHours: 5000,
+    },
+  },
+
   // Printer presets (power in watts, lifetime in hours)
   // Bambu Lab power specs from: https://wiki.bambulab.com/en/general/power-consumption
   PRINTER_PRESETS: {

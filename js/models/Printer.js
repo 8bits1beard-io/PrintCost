@@ -35,6 +35,20 @@ class Printer {
     // Associated consumable IDs
     this.consumableIds = data.consumableIds || [];
 
+    // AMS settings (optional)
+    this.hasAms = data.hasAms ?? false;
+    this.ams = data.ams ? {
+      type: data.ams.type || '',
+      name: data.ams.name || '',
+      powerConsumption: {
+        standby: data.ams.powerConsumption?.standby ?? 0,
+        working: data.ams.powerConsumption?.working ?? 0,
+      },
+      purchasePrice: data.ams.purchasePrice ?? 0,
+      estimatedLifetimeHours: data.ams.estimatedLifetimeHours ?? 5000,
+      currentHours: data.ams.currentHours ?? 0,
+    } : null;
+
     // Metadata
     this.notes = data.notes || '';
     this.createdAt = data.createdAt || new Date().toISOString();
@@ -61,15 +75,50 @@ class Printer {
   }
 
   /**
-   * Calculate electricity cost for a given print time
+   * Calculate electricity cost for a given print time (includes AMS if attached)
    * @param {number} printTimeMinutes - Print time in minutes
    * @param {number} electricityRate - Cost per kWh
    * @returns {number} Electricity cost
    */
   getElectricityCost(printTimeMinutes, electricityRate) {
     const hours = printTimeMinutes / 60;
-    const kWh = (this.powerConsumption.printing / 1000) * hours;
+    let totalWatts = this.powerConsumption.printing;
+
+    // Add AMS power consumption if attached
+    if (this.hasAms && this.ams) {
+      totalWatts += this.ams.powerConsumption.working;
+    }
+
+    const kWh = (totalWatts / 1000) * hours;
     return kWh * electricityRate;
+  }
+
+  /**
+   * Get AMS depreciation cost per hour
+   * @returns {number} Cost per hour in currency
+   */
+  getAmsDepreciationPerHour() {
+    if (!this.hasAms || !this.ams || this.ams.estimatedLifetimeHours <= 0) return 0;
+    return this.ams.purchasePrice / this.ams.estimatedLifetimeHours;
+  }
+
+  /**
+   * Calculate AMS depreciation cost for a given print time
+   * @param {number} printTimeMinutes - Print time in minutes
+   * @returns {number} AMS depreciation cost
+   */
+  getAmsDepreciationCost(printTimeMinutes) {
+    const hours = printTimeMinutes / 60;
+    return this.getAmsDepreciationPerHour() * hours;
+  }
+
+  /**
+   * Get total depreciation cost (printer + AMS) for a given print time
+   * @param {number} printTimeMinutes - Print time in minutes
+   * @returns {number} Total depreciation cost
+   */
+  getTotalDepreciationCost(printTimeMinutes) {
+    return this.getDepreciationCost(printTimeMinutes) + this.getAmsDepreciationCost(printTimeMinutes);
   }
 
   /**
@@ -145,7 +194,7 @@ class Printer {
    * @returns {Object} Plain object
    */
   toJSON() {
-    return {
+    const json = {
       id: this.id,
       name: this.name,
       manufacturer: this.manufacturer,
@@ -157,10 +206,24 @@ class Printer {
       defaultFailureRate: this.defaultFailureRate,
       buildVolume: { ...this.buildVolume },
       consumableIds: [...this.consumableIds],
+      hasAms: this.hasAms,
       notes: this.notes,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
     };
+
+    if (this.ams) {
+      json.ams = {
+        type: this.ams.type,
+        name: this.ams.name,
+        powerConsumption: { ...this.ams.powerConsumption },
+        purchasePrice: this.ams.purchasePrice,
+        estimatedLifetimeHours: this.ams.estimatedLifetimeHours,
+        currentHours: this.ams.currentHours,
+      };
+    }
+
+    return json;
   }
 
   /**

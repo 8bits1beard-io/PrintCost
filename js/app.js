@@ -854,7 +854,7 @@ const App = {
               <div class="flex flex-col gap-2 text-sm">
                 <div class="flex justify-between">
                   <span class="text-gray-500">Power</span>
-                  <span>${Formatters.power(printer.powerConsumption.printing)}</span>
+                  <span>${Formatters.power(printer.powerConsumption.printing)}${printer.hasAms && printer.ams ? ` (+${Formatters.power(printer.ams.powerConsumption.working)} AMS)` : ''}</span>
                 </div>
                 <div class="flex justify-between">
                   <span class="text-gray-500">Purchase Price</span>
@@ -862,12 +862,18 @@ const App = {
                 </div>
                 <div class="flex justify-between">
                   <span class="text-gray-500">Depreciation</span>
-                  <span>${Formatters.pricePerHour(printer.getDepreciationPerHour())}</span>
+                  <span>${Formatters.pricePerHour(printer.getDepreciationPerHour() + printer.getAmsDepreciationPerHour())}</span>
                 </div>
                 <div class="flex justify-between">
                   <span class="text-gray-500">Hours Used</span>
                   <span>${Formatters.number(printer.currentHours, 1)}h</span>
                 </div>
+                ${printer.hasAms && printer.ams ? `
+                <div class="flex justify-between">
+                  <span class="text-gray-500">AMS</span>
+                  <span>${printer.ams.name} (${Formatters.currency(printer.ams.purchasePrice)})</span>
+                </div>
+                ` : ''}
               </div>
 
               <div class="mt-4">
@@ -1709,6 +1715,57 @@ const App = {
         <label class="form-label">Notes</label>
         <textarea class="form-textarea" id="printer-notes" rows="2">${Helpers.escapeHtml(printer.notes)}</textarea>
       </div>
+
+      <h4 class="mt-4 mb-2">AMS (Automatic Material System)</h4>
+      <div class="form-group">
+        <label class="form-checkbox">
+          <input type="checkbox" id="printer-has-ams" ${printer.hasAms ? 'checked' : ''}>
+          <span>This printer has an AMS attached</span>
+        </label>
+      </div>
+
+      <div id="ams-settings" class="${printer.hasAms ? '' : 'hidden'}">
+        <div class="form-group">
+          <label class="form-label">AMS Model</label>
+          <select class="form-select" id="printer-ams-type">
+            <option value="">-- Select AMS model --</option>
+            ${Object.entries(CONFIG.AMS_PRESETS).map(([key, ams]) =>
+              `<option value="${key}" ${printer.ams?.type === key ? 'selected' : ''}>${ams.name}</option>`
+            ).join('')}
+          </select>
+        </div>
+
+        <div class="grid grid--2">
+          <div class="form-group">
+            <label class="form-label">AMS Power (Working)</label>
+            <div class="input-group">
+              <input type="number" class="form-input" id="printer-ams-power" min="0" step="0.01" value="${printer.ams?.powerConsumption?.working || 0}" readonly>
+              <span class="input-group__addon">W</span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">AMS Purchase Price</label>
+            <div class="input-group">
+              <input type="number" class="form-input" id="printer-ams-price" min="0" step="0.01" value="${printer.ams?.purchasePrice || 0}">
+              <span class="input-group__addon">${CONFIG.CURRENCY.symbol}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid--2">
+          <div class="form-group">
+            <label class="form-label">AMS Lifetime</label>
+            <div class="input-group">
+              <input type="number" class="form-input" id="printer-ams-lifetime" min="1" value="${printer.ams?.estimatedLifetimeHours || 5000}">
+              <span class="input-group__addon">hours</span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">AMS Hours Used</label>
+            <input type="number" class="form-input" id="printer-ams-hours" min="0" step="0.1" value="${printer.ams?.currentHours || 0}">
+          </div>
+        </div>
+      </div>
     `;
 
     const footer = `
@@ -1717,6 +1774,28 @@ const App = {
     `;
 
     this.showModal(isEdit ? 'Edit Printer' : 'Add Printer', content, { footer, size: 'lg' });
+
+    // AMS checkbox toggle
+    document.getElementById('printer-has-ams').addEventListener('change', (e) => {
+      const amsSettings = document.getElementById('ams-settings');
+      if (e.target.checked) {
+        amsSettings.classList.remove('hidden');
+      } else {
+        amsSettings.classList.add('hidden');
+      }
+    });
+
+    // AMS type selector
+    document.getElementById('printer-ams-type').addEventListener('change', (e) => {
+      const amsKey = e.target.value;
+      if (!amsKey) return;
+
+      const amsPreset = CONFIG.AMS_PRESETS[amsKey];
+      if (!amsPreset) return;
+
+      document.getElementById('printer-ams-power').value = amsPreset.powerConsumption.working;
+      document.getElementById('printer-ams-lifetime').value = amsPreset.estimatedLifetimeHours;
+    });
 
     // Add preset selector event listener (only for new printers)
     if (!isEdit) {
@@ -1742,7 +1821,11 @@ const App = {
   },
 
   savePrinter(printerId) {
-    const printer = new Printer({
+    const hasAms = document.getElementById('printer-has-ams').checked;
+    const amsType = document.getElementById('printer-ams-type').value;
+    const amsPreset = amsType ? CONFIG.AMS_PRESETS[amsType] : null;
+
+    const printerData = {
       id: printerId,
       name: document.getElementById('printer-name').value,
       manufacturer: document.getElementById('printer-manufacturer').value,
@@ -1757,7 +1840,24 @@ const App = {
       currentHours: Helpers.parseNumber(document.getElementById('printer-hours').value, 0),
       defaultFailureRate: Helpers.parseNumber(document.getElementById('printer-failure').value, 5) / 100,
       notes: document.getElementById('printer-notes').value,
-    });
+      hasAms: hasAms,
+    };
+
+    if (hasAms && amsType) {
+      printerData.ams = {
+        type: amsType,
+        name: amsPreset?.name || '',
+        powerConsumption: {
+          standby: amsPreset?.powerConsumption?.standby || 0,
+          working: Helpers.parseNumber(document.getElementById('printer-ams-power').value, 0),
+        },
+        purchasePrice: Helpers.parseNumber(document.getElementById('printer-ams-price').value, 0),
+        estimatedLifetimeHours: Helpers.parseNumber(document.getElementById('printer-ams-lifetime').value, 5000),
+        currentHours: Helpers.parseNumber(document.getElementById('printer-ams-hours').value, 0),
+      };
+    }
+
+    const printer = new Printer(printerData);
 
     if (!printer.name.trim()) {
       this.showToast('Please enter a printer name', 'error');
