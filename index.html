@@ -254,5 +254,31 @@
 
   <!-- Main App -->
   <script src="js/app.js"></script>
+
+  <!-- Konami Code Easter Egg -->
+  <script>
+    (function() {
+      const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+      let konamiIndex = 0;
+
+      document.addEventListener('keydown', function(e) {
+        const key = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+
+        if (key === konamiCode[konamiIndex]) {
+          konamiIndex++;
+
+          if (konamiIndex === konamiCode.length) {
+            konamiIndex = 0;
+            window.location.href = '404.html';
+          }
+        } else {
+          konamiIndex = 0;
+          if (key === konamiCode[0]) {
+            konamiIndex = 1;
+          }
+        }
+      });
+    })();
+  </script>
 </body>
 </html>
