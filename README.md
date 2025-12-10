@@ -1,0 +1,124 @@
+# 3DPrintCostCalculator (3DPCC)
+
+**FDM 3D Print Cost Calculator**
+
+A web-based tool for calculating the true cost of FDM 3D prints, including filament, electricity, printer depreciation, consumable wear, and more.
+
+![License](https://img.shields.io/badge/license-MIT-blue.svg)
+![Version](https://img.shields.io/badge/version-1.0.0-green.svg)
+![No Dependencies](https://img.shields.io/badge/dependencies-Chart.js%20only-orange.svg)
+
+---
+
+## Features
+
+- **Accurate Cost Calculation** — Accounts for all cost factors: filament, electricity, depreciation, consumables, labor, failure rate, and markup
+- **G-code Parsing** — Auto-extract print time and filament usage from slicer files
+- **Multiple Profiles** — Manage multiple printers and filament types
+- **Consumable Tracking** — Track wear on nozzles, beds, belts, and other parts with replacement alerts
+- **Location-Based Rates** — Pre-configured electricity rates for 50+ regions worldwide
+- **Cost Comparison** — Compare costs across different printer/filament combinations
+- **Print History** — Save and track all your print calculations
+- **Dashboard Analytics** — Visualize spending trends and cost breakdowns
+- **Privacy First** — All data stored locally in your browser, nothing sent to servers
+- **No Installation** — Pure HTML/CSS/JS, runs in any modern browser
+
+## Quick Start
+
+1. Download or clone this repository
+2. Open `index.html` in your browser
+3. Select your location (for electricity rates)
+4. Add your printer(s) and filament(s)
+5. Start calculating!
+
+**Try it online:** [https://3dprintcost.pages.dev](https://3dprintcost.pages.dev)
+
+## Cost Calculation
+
+3DPCC uses a comprehensive formula to calculate the true cost of a print:
+
+```
+Filament Cost    = grams used × (spool price ÷ spool weight)
+Electricity Cost = (printer watts ÷ 1000) × hours × rate per kWh
+Depreciation     = (purchase price ÷ lifetime hours) × print hours
+Consumables      = Σ (item price ÷ item lifetime hours) × print hours
+Labor Cost       = labor hours × hourly rate
+
+Subtotal         = Filament + Electricity + Depreciation + Consumables + Labor
+Failure Buffer   = Subtotal × (failure rate ÷ (1 - failure rate))
+Markup           = (Subtotal + Failure Buffer) × markup percentage
+
+TOTAL            = Subtotal + Failure Buffer + Markup
+```
+
+### Why Include Failure Rate?
+
+A 5% failure rate means 1 in 20 prints fails. The failure buffer accounts for wasted material and time from failed prints, giving you a more realistic cost per successful print.
+
+## Supported Slicers
+
+3DPCC can parse G-code from these slicers to auto-fill print time and filament usage:
+
+| Slicer | Supported | Notes |
+|--------|-----------|-------|
+| PrusaSlicer | Yes | Metadata in file footer |
+| SuperSlicer | Yes | Same format as PrusaSlicer |
+| OrcaSlicer | Yes | Same format as PrusaSlicer |
+| Bambu Studio | Yes | Same format as PrusaSlicer |
+| Cura | Yes | Metadata in file header |
+
+Don't see your slicer? You can always enter values manually.
+
+## Electricity Rates
+
+Pre-configured rates for 50+ regions including:
+
+- **North America** — USA (by state), Canada
+- **Europe** — UK, Germany, France, Netherlands, Spain, Italy, and more
+- **Asia-Pacific** — Australia, New Zealand, Japan, South Korea, China, India
+- **South America** — Brazil, Argentina
+
+You can also enter a custom rate for your specific utility provider.
+
+## Data Storage
+
+All data is stored in your browser's localStorage:
+- Printer profiles
+- Filament library
+- Consumables
+- Print history
+- Settings
+
+**Export/Import:** Use the Export button to backup your data as JSON. Import on another device or browser to restore.
+
+**Privacy:** No data is ever sent to any server. Everything stays on your device.
+
+## Tech Stack
+
+- Vanilla HTML/CSS/JavaScript (no framework, no build step)
+- [Chart.js](https://www.chartjs.org/) for visualizations
+- localStorage for data persistence
+
+## Browser Support
+
+Works in all modern browsers:
+- Chrome/Edge 80+
+- Firefox 75+
+- Safari 13+
+
+## Contributing
+
+Contributions are welcome! Feel free to:
+- Report bugs via [GitHub Issues](https://github.com/8bits1beard-io/PrintCost/issues)
+- Submit feature requests
+- Open pull requests
+
+## License
+
+MIT License — see [LICENSE](LICENSE) for details.
+
+Created by [Joshua Walderbach](https://github.com/8bits1beard-io)
+
+---
+
+**3DPrintCostCalculator** — Know your true printing costs.
