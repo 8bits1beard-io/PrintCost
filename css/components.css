@@ -744,6 +744,40 @@
 }
 
 /* ==========================================================================
+   Theme Toggle
+   ========================================================================== */
+
+.theme-toggle .icon-sun,
+.theme-toggle .icon-moon,
+.theme-toggle .icon-snowflake {
+  display: none;
+}
+
+/* Light mode (default): show moon (click for dark) */
+.theme-toggle .icon-moon {
+  display: block;
+}
+
+/* Dark mode: show snowflake (click for christmas) */
+body.theme-dark .theme-toggle .icon-moon {
+  display: none;
+}
+
+body.theme-dark .theme-toggle .icon-snowflake {
+  display: block;
+}
+
+/* Christmas mode: show sun (click for light) */
+body.theme-christmas .theme-toggle .icon-moon,
+body.theme-christmas .theme-toggle .icon-snowflake {
+  display: none;
+}
+
+body.theme-christmas .theme-toggle .icon-sun {
+  display: block;
+}
+
+/* ==========================================================================
    Color Swatch
    ========================================================================== */
 

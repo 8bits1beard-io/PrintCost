@@ -5,12 +5,17 @@
 
 const App = {
   currentPage: 'dashboard',
+  themes: ['light', 'dark', 'christmas'],
+  currentTheme: 'light',
 
   /**
    * Initialize the application
    */
   init() {
     console.log('Initializing PrintCost...');
+
+    // Load saved theme
+    this.loadTheme();
 
     // Check for first launch
     if (storage.isFirstLaunch()) {
@@ -165,6 +170,11 @@ const App = {
       this.showSettingsModal();
     });
 
+    // Theme toggle button
+    document.getElementById('btn-theme-toggle').addEventListener('click', () => {
+      this.cycleTheme();
+    });
+
     // Add printer button
     document.getElementById('btn-add-printer').addEventListener('click', () => {
       this.showPrinterModal();
@@ -179,6 +189,75 @@ const App = {
     document.getElementById('btn-add-consumable').addEventListener('click', () => {
       this.showConsumableModal();
     });
+  },
+
+  // ============================================================
+  // Theme Management
+  // ============================================================
+
+  /**
+   * Load saved theme from localStorage
+   */
+  loadTheme() {
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    this.applyTheme(savedTheme);
+  },
+
+  /**
+   * Apply a theme to the body
+   * @param {string} theme - Theme name ('light', 'dark', 'christmas')
+   */
+  applyTheme(theme) {
+    // Remove all theme classes
+    document.body.classList.remove('theme-dark', 'theme-christmas');
+
+    // Apply new theme if not light (light is default, no class needed)
+    if (theme === 'dark') {
+      document.body.classList.add('theme-dark');
+    } else if (theme === 'christmas') {
+      document.body.classList.add('theme-christmas');
+    }
+
+    this.currentTheme = theme;
+    localStorage.setItem('theme', theme);
+
+    // Update toggle button title
+    const nextTheme = this.getNextTheme();
+    const titles = {
+      'light': 'Light mode',
+      'dark': 'Dark mode',
+      'christmas': 'Christmas mode'
+    };
+    const toggleBtn = document.getElementById('btn-theme-toggle');
+    if (toggleBtn) {
+      toggleBtn.title = `Switch to ${titles[nextTheme]}`;
+      toggleBtn.setAttribute('aria-label', `Switch to ${titles[nextTheme]}`);
+    }
+  },
+
+  /**
+   * Get the next theme in the cycle
+   * @returns {string} Next theme name
+   */
+  getNextTheme() {
+    const currentIndex = this.themes.indexOf(this.currentTheme);
+    const nextIndex = (currentIndex + 1) % this.themes.length;
+    return this.themes[nextIndex];
+  },
+
+  /**
+   * Cycle to the next theme
+   */
+  cycleTheme() {
+    const nextTheme = this.getNextTheme();
+    this.applyTheme(nextTheme);
+
+    const titles = {
+      'light': 'Light mode',
+      'dark': 'Dark mode',
+      'christmas': 'Christmas mode'
+    };
+    this.showToast(`Switched to ${titles[nextTheme]}`, 'success');
   },
 
   // ============================================================

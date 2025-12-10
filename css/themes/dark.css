@@ -1,0 +1,355 @@
+/* ==========================================================================
+   Dark Theme
+   Easy on the eyes for late-night printing calculations
+   ========================================================================== */
+
+body.theme-dark {
+  /* Dark mode colors */
+  --color-primary: #60a5fa;           /* Lighter blue for dark mode */
+  --color-primary-hover: #3b82f6;
+  --color-primary-light: #1e3a5f;
+
+  --color-secondary: #94a3b8;
+  --color-secondary-hover: #cbd5e1;
+
+  /* Status colors - slightly muted for dark mode */
+  --color-success: #4ade80;
+  --color-success-light: #14532d;
+  --color-warning: #fbbf24;
+  --color-warning-light: #713f12;
+  --color-error: #f87171;
+  --color-error-light: #7f1d1d;
+  --color-info: #60a5fa;
+  --color-info-light: #1e3a5f;
+
+  /* Dark neutral colors */
+  --color-white: #1e293b;
+  --color-gray-50: #0f172a;
+  --color-gray-100: #1e293b;
+  --color-gray-200: #334155;
+  --color-gray-300: #475569;
+  --color-gray-400: #94a3b8;
+  --color-gray-500: #cbd5e1;
+  --color-gray-600: #e2e8f0;
+  --color-gray-700: #f1f5f9;
+  --color-gray-800: #f8fafc;
+  --color-gray-900: #ffffff;
+
+  /* Shadows for dark mode */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.3);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.4), 0 4px 6px -4px rgb(0 0 0 / 0.3);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.4), 0 8px 10px -6px rgb(0 0 0 / 0.3);
+}
+
+/* Body background */
+body.theme-dark {
+  background-color: #0f172a;
+  color: #e2e8f0;
+}
+
+/* Header */
+body.theme-dark .app-header {
+  background: #1e293b;
+  border-bottom: 1px solid #334155;
+}
+
+body.theme-dark .app-header__logo {
+  color: #f1f5f9;
+}
+
+body.theme-dark .app-header__logo svg {
+  color: #60a5fa;
+}
+
+body.theme-dark .app-header__actions .btn {
+  color: #e2e8f0;
+  border-color: #475569;
+}
+
+body.theme-dark .app-header__actions .btn:hover {
+  background: #334155;
+  border-color: #64748b;
+}
+
+/* Navigation */
+body.theme-dark .app-nav {
+  background: #1e293b;
+  border-bottom: 1px solid #334155;
+}
+
+body.theme-dark .app-nav__link {
+  color: #94a3b8;
+}
+
+body.theme-dark .app-nav__link:hover {
+  color: #f1f5f9;
+  background: #334155;
+}
+
+body.theme-dark .app-nav__link.active {
+  color: #f1f5f9;
+  background: #334155;
+  border-bottom-color: #60a5fa;
+}
+
+body.theme-dark .app-nav__link svg {
+  color: #64748b;
+}
+
+body.theme-dark .app-nav__link.active svg,
+body.theme-dark .app-nav__link:hover svg {
+  color: #60a5fa;
+}
+
+/* Main content area */
+body.theme-dark .app-main {
+  background: #0f172a;
+}
+
+/* Cards */
+body.theme-dark .card {
+  background: #1e293b;
+  border: 1px solid #334155;
+}
+
+body.theme-dark .card__header {
+  border-bottom-color: #334155;
+}
+
+body.theme-dark .card__footer {
+  border-top-color: #334155;
+  background: #0f172a;
+}
+
+/* Buttons */
+body.theme-dark .btn--primary {
+  background: #3b82f6;
+  border-color: #2563eb;
+  color: #fff;
+}
+
+body.theme-dark .btn--primary:hover {
+  background: #2563eb;
+}
+
+body.theme-dark .btn--secondary {
+  background: #334155;
+  border-color: #475569;
+  color: #e2e8f0;
+}
+
+body.theme-dark .btn--secondary:hover {
+  background: #475569;
+}
+
+body.theme-dark .btn--ghost {
+  color: #94a3b8;
+}
+
+body.theme-dark .btn--ghost:hover {
+  background: #334155;
+  color: #f1f5f9;
+}
+
+/* Form elements */
+body.theme-dark .form-input,
+body.theme-dark .form-select,
+body.theme-dark .form-textarea {
+  background: #0f172a;
+  border-color: #475569;
+  color: #e2e8f0;
+}
+
+body.theme-dark .form-input:focus,
+body.theme-dark .form-select:focus,
+body.theme-dark .form-textarea:focus {
+  border-color: #60a5fa;
+  box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2);
+}
+
+body.theme-dark .form-input::placeholder,
+body.theme-dark .form-textarea::placeholder {
+  color: #64748b;
+}
+
+body.theme-dark .form-label {
+  color: #cbd5e1;
+}
+
+body.theme-dark .input-group__addon {
+  background: #334155;
+  border-color: #475569;
+  color: #94a3b8;
+}
+
+/* Cost breakdown */
+body.theme-dark .cost-breakdown__label {
+  color: #94a3b8;
+}
+
+body.theme-dark .cost-breakdown__value {
+  color: #e2e8f0;
+}
+
+body.theme-dark .cost-breakdown__divider {
+  border-top-color: #334155;
+}
+
+body.theme-dark .cost-breakdown__total .cost-breakdown__value {
+  color: #60a5fa;
+}
+
+/* Stats cards */
+body.theme-dark .stat-card {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+body.theme-dark .stat-card__value {
+  color: #f1f5f9;
+}
+
+body.theme-dark .stat-card__label {
+  color: #94a3b8;
+}
+
+/* Modal */
+body.theme-dark .modal__backdrop {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+body.theme-dark .modal {
+  background: #1e293b;
+  border: 1px solid #334155;
+}
+
+body.theme-dark .modal__header {
+  border-bottom-color: #334155;
+}
+
+body.theme-dark .modal__title {
+  color: #f1f5f9;
+}
+
+body.theme-dark .modal__close {
+  color: #94a3b8;
+}
+
+body.theme-dark .modal__close:hover {
+  color: #f1f5f9;
+  background: #334155;
+}
+
+body.theme-dark .modal__footer {
+  border-top-color: #334155;
+  background: #0f172a;
+}
+
+/* Tables */
+body.theme-dark table {
+  border-color: #334155;
+}
+
+body.theme-dark th {
+  background: #0f172a;
+  color: #cbd5e1;
+  border-color: #334155;
+}
+
+body.theme-dark td {
+  border-color: #334155;
+  color: #e2e8f0;
+}
+
+body.theme-dark tr:hover {
+  background: #0f172a;
+}
+
+/* Dropzone */
+body.theme-dark .dropzone {
+  background: #0f172a;
+  border-color: #475569;
+  color: #94a3b8;
+}
+
+body.theme-dark .dropzone:hover,
+body.theme-dark .dropzone.dragover {
+  border-color: #60a5fa;
+  background: #1e3a5f;
+}
+
+/* Toast */
+body.theme-dark .toast {
+  background: #334155;
+  color: #f1f5f9;
+  border-color: #475569;
+}
+
+/* Progress bar */
+body.theme-dark .progress {
+  background: #334155;
+}
+
+/* Badges */
+body.theme-dark .badge {
+  background: #334155;
+  color: #e2e8f0;
+}
+
+/* Page header */
+body.theme-dark .page-header__title {
+  color: #f1f5f9;
+}
+
+body.theme-dark .page-header__description {
+  color: #94a3b8;
+}
+
+/* Empty state */
+body.theme-dark .empty-state {
+  color: #64748b;
+}
+
+/* Dividers */
+body.theme-dark hr {
+  border-color: #334155;
+}
+
+/* Links */
+body.theme-dark a:not(.btn):not(.app-nav__link) {
+  color: #60a5fa;
+}
+
+body.theme-dark a:not(.btn):not(.app-nav__link):hover {
+  color: #93c5fd;
+}
+
+/* Scrollbar */
+body.theme-dark ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+body.theme-dark ::-webkit-scrollbar-track {
+  background: #1e293b;
+}
+
+body.theme-dark ::-webkit-scrollbar-thumb {
+  background: #475569;
+  border-radius: 4px;
+}
+
+body.theme-dark ::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
+
+/* Theme toggle icon color */
+body.theme-dark .theme-toggle {
+  color: #fbbf24;
+}
+
+/* Chart.js dark mode - handled via Chart config, but set text colors */
+body.theme-dark canvas {
+  filter: none;
+}
