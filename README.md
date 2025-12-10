@@ -50,6 +50,74 @@ A web-based tool for calculating the true cost of FDM 3D prints, including filam
 
 **Try it online:** [https://3dprintcost.pages.dev](https://3dprintcost.pages.dev)
 
+## Getting Started Walkthrough
+
+This example walks through setting up a printer, adding two filaments, and calculating your first print cost.
+
+### Step 1: Add Your Printer
+
+1. Go to **Printers** → Click **Add Printer**
+2. Select a preset (e.g., "Bambu Lab P1S") or enter details manually:
+   - Name: `My P1S`
+   - Purchase Price: `$699`
+   - Expected Lifetime: `5000 hours`
+3. If you have an AMS, check "This printer has an AMS attached" and select your model
+4. Click **Add Printer**
+
+### Step 2: Add Your Filaments
+
+**Filament 1: Standard PLA**
+1. Go to **Filaments** → Click **Add Filament**
+2. Enter:
+   - Name: `Bambu PLA Basic - Black`
+   - Material: `PLA`
+   - Spool Weight: `1000g`
+   - Spool Price: `$18`
+3. Click **Add Filament**
+
+**Filament 2: Premium PETG**
+1. Click **Add Filament** again
+2. Enter:
+   - Name: `Prusament PETG - Galaxy Black`
+   - Material: `PETG`
+   - Spool Weight: `1000g`
+   - Spool Price: `$30`
+3. Click **Add Filament**
+
+### Step 3: Calculate a Print
+
+1. Go to **Calculator**
+2. Either upload a G-code file (drag & drop) or enter manually:
+   - Print Time: `2 hours 30 minutes`
+   - Filament Used: `45g`
+3. Select your printer and filament
+4. Adjust settings if needed (failure rate, markup for selling)
+5. View the cost breakdown
+
+### Example Result
+
+For a 2.5 hour print using 45g of PLA ($18/kg):
+
+| Cost Component | Amount |
+|----------------|--------|
+| Filament | $0.81 |
+| Electricity | $0.05 |
+| Depreciation | $0.35 |
+| **Subtotal** | **$1.21** |
+| Failure Buffer (5%) | $0.06 |
+| **Total** | **$1.27** |
+
+### Understanding the Flow
+
+```mermaid
+flowchart LR
+    A[Add Printer] --> B[Add Filaments]
+    B --> C[Upload G-code<br/>or Enter Manually]
+    C --> D[View Cost<br/>Breakdown]
+    D --> E[Save to History]
+    D --> F[Compare Options]
+```
+
 ## Cost Calculation
 
 3DPCC uses a comprehensive formula to calculate the true cost of a print:
