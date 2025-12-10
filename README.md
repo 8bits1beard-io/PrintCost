@@ -207,4 +207,4 @@ Created by [Joshua Walderbach](https://github.com/8bits1beard-io)
 
 ---
 
-*Dedicated to the memory of all my ex-girlfriends. If only a tool like this had existed before, I could have calculated the cost of each!*
+*Dedicated to all my ex-girlfriends. If only there was a calculator for relationships — I could have seen the total cost, failure rate, and expected wear on my consumables!*
