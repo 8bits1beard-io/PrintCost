@@ -204,3 +204,7 @@ Created by [Joshua Walderbach](https://github.com/8bits1beard-io)
 ---
 
 **3DPrintCostCalculator** — Know your true printing costs.
+
+---
+
+*Dedicated to the memory of all my ex-girlfriends. If only a tool like this had existed before, I could have calculated the cost of each!*

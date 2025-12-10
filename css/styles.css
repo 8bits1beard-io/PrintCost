@@ -236,6 +236,17 @@ code {
   text-decoration: underline;
 }
 
+.app-footer p {
+  margin: 0;
+}
+
+.app-footer__dedication {
+  margin-top: var(--spacing-2);
+  font-style: italic;
+  font-size: 0.8rem;
+  opacity: 0.8;
+}
+
 .container {
   max-width: var(--container-max-width);
   margin: 0 auto;
