@@ -485,17 +485,17 @@ const App = {
           </div>
           <div class="card__body">
             <div class="form-group">
-              <label class="form-label">Job Name</label>
+              <label class="form-label">Job Name <span class="tooltip-icon" title="Optional name to identify this print in your history">?</span></label>
               <input type="text" class="form-input" id="calc-name" placeholder="My Print">
             </div>
 
             <div class="form-group">
-              <label class="form-label form-label--required">Print Time (minutes)</label>
+              <label class="form-label form-label--required">Print Time (minutes) <span class="tooltip-icon" title="Total print time from your slicer. Found in the sliced preview or G-code file.">?</span></label>
               <input type="number" class="form-input" id="calc-time" min="0" step="1" value="60">
             </div>
 
             <div class="form-group">
-              <label class="form-label form-label--required">Printer</label>
+              <label class="form-label form-label--required">Printer <span class="tooltip-icon" title="Select the printer you'll use. Its power consumption and depreciation will be factored into the cost.">?</span></label>
               <select class="form-select" id="calc-printer">
                 ${printers.length === 0 ? '<option value="">No printers - add one first</option>' : ''}
                 ${printers.map(p => `<option value="${p.id}">${Helpers.escapeHtml(p.getDisplayName())}</option>`).join('')}
@@ -503,7 +503,7 @@ const App = {
             </div>
 
             <div class="form-group">
-              <label class="form-label form-label--required">Filaments Used</label>
+              <label class="form-label form-label--required">Filaments Used <span class="tooltip-icon" title="Select filament(s) and enter the weight in grams from your slicer. Add multiple for multi-color prints.">?</span></label>
               <div id="calc-filaments-list">
                 <!-- Filament entries will be added here dynamically -->
               </div>
@@ -517,14 +517,14 @@ const App = {
 
             <div class="grid grid--2">
               <div class="form-group">
-                <label class="form-label">Electricity Rate</label>
+                <label class="form-label">Electricity Rate <span class="tooltip-icon" title="Your electricity cost per kilowatt-hour. Check your utility bill or use your region's average rate.">?</span></label>
                 <div class="input-group">
                   <input type="number" class="form-input" id="calc-electricity" min="0" step="0.01" value="${settings.electricityRate || 0.15}">
                   <span class="input-group__addon">/kWh</span>
                 </div>
               </div>
               <div class="form-group">
-                <label class="form-label">Failure Rate</label>
+                <label class="form-label">Failure Rate <span class="tooltip-icon" title="Percentage of prints that fail. A 5% rate means 1 in 20 prints fail. This adds a buffer to cover wasted materials from failed prints.">?</span></label>
                 <div class="input-group">
                   <input type="number" class="form-input" id="calc-failure" min="0" max="100" step="1" value="${(settings.defaultFailureRate || 0.05) * 100}">
                   <span class="input-group__addon">%</span>
@@ -534,20 +534,20 @@ const App = {
 
             <div class="grid grid--2">
               <div class="form-group">
-                <label class="form-label">Labor Rate</label>
+                <label class="form-label">Labor Rate <span class="tooltip-icon" title="Your hourly rate for time spent on this print (design, setup, post-processing). Set to 0 if not selling.">?</span></label>
                 <div class="input-group">
                   <input type="number" class="form-input" id="calc-labor-rate" min="0" step="0.01" value="0">
                   <span class="input-group__addon">/hr</span>
                 </div>
               </div>
               <div class="form-group">
-                <label class="form-label">Labor Time (hours)</label>
+                <label class="form-label">Labor Time (hours) <span class="tooltip-icon" title="Hours spent on design, setup, monitoring, post-processing, etc.">?</span></label>
                 <input type="number" class="form-input" id="calc-labor-hours" min="0" step="0.1" value="0">
               </div>
             </div>
 
             <div class="form-group">
-              <label class="form-label">Markup</label>
+              <label class="form-label">Markup <span class="tooltip-icon" title="Profit margin percentage added on top of all costs. Use this when pricing prints for sale. 50% markup on a $10 cost = $15 price.">?</span></label>
               <div class="input-group">
                 <input type="number" class="form-input" id="calc-markup" min="0" max="1000" step="1" value="0">
                 <span class="input-group__addon">%</span>

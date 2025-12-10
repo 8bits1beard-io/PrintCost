@@ -201,6 +201,18 @@ body.theme-christmas .input-group__addon {
   color: #9cb39c;
 }
 
+body.theme-christmas .tooltip-icon {
+  color: #6b8b6b;
+  background: #2a352a;
+  border-color: #3a4a3a;
+}
+
+body.theme-christmas .tooltip-icon:hover {
+  color: #9cb39c;
+  background: #3a4a3a;
+  border-color: #4a5a4a;
+}
+
 /* Cost breakdown */
 body.theme-christmas .cost-breakdown__label {
   color: #9cb39c;
