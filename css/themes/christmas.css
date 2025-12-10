@@ -1,35 +1,62 @@
 /* ==========================================================================
-   Christmas Theme
-   Festive colors and subtle holiday decorations
+   Christmas Theme (Dark Mode)
+   Festive colors on a cozy dark background
    ========================================================================== */
 
 body.theme-christmas {
   /* Christmas Colors */
-  --color-primary: #c41e3a;           /* Christmas Red */
-  --color-primary-hover: #a01830;
-  --color-primary-light: #fce4e8;
+  --color-primary: #e85a6f;           /* Bright Christmas Red */
+  --color-primary-hover: #c41e3a;
+  --color-primary-light: #3d1a1f;
 
-  --color-secondary: #228b22;          /* Forest Green */
-  --color-secondary-hover: #1a6b1a;
+  --color-secondary: #3cb371;          /* Medium Sea Green */
+  --color-secondary-hover: #228b22;
 
-  --color-success: #228b22;            /* Green */
-  --color-success-light: #dcf5dc;
+  --color-success: #3cb371;
+  --color-success-light: #1a3d2a;
+  --color-warning: #ffd700;
+  --color-warning-light: #3d3510;
+  --color-error: #e85a6f;
+  --color-error-light: #3d1a1f;
+  --color-info: #87ceeb;
+  --color-info-light: #1a2d3d;
 
   /* Festive accents */
   --color-gold: #ffd700;
   --color-silver: #c0c0c0;
 
-  /* Slightly warmer backgrounds */
-  --color-gray-50: #fefdfb;
-  --color-gray-100: #faf8f5;
+  /* Dark backgrounds with slight warmth */
+  --color-white: #1a1f1a;
+  --color-gray-50: #0f140f;
+  --color-gray-100: #1a1f1a;
+  --color-gray-200: #2a352a;
+  --color-gray-300: #3a4a3a;
+  --color-gray-400: #6b8b6b;
+  --color-gray-500: #9cb39c;
+  --color-gray-600: #c8dac8;
+  --color-gray-700: #e0ebe0;
+  --color-gray-800: #f0f5f0;
+  --color-gray-900: #ffffff;
 
   /* Chart colors - festive palette */
-  --chart-color-1: #c41e3a;  /* Red */
-  --chart-color-2: #228b22;  /* Green */
+  --chart-color-1: #e85a6f;  /* Red */
+  --chart-color-2: #3cb371;  /* Green */
   --chart-color-3: #ffd700;  /* Gold */
-  --chart-color-4: #1e90ff;  /* Dodger Blue (like ice) */
+  --chart-color-4: #87ceeb;  /* Sky Blue (like ice) */
   --chart-color-5: #c0c0c0;  /* Silver */
-  --chart-color-6: #8b0000;  /* Dark Red */
+  --chart-color-6: #ff6b6b;  /* Light Red */
+
+  /* Shadows for dark mode */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.4);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.5), 0 2px 4px -2px rgb(0 0 0 / 0.4);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5), 0 4px 6px -4px rgb(0 0 0 / 0.4);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.5), 0 8px 10px -6px rgb(0 0 0 / 0.4);
+}
+
+/* Body background */
+body.theme-christmas {
+  background-color: #0f140f;
+  color: #c8dac8;
 }
 
 /* Header with festive gradient */
@@ -86,33 +113,115 @@ body.theme-christmas .app-nav__link:hover svg {
   color: #ffd700;
 }
 
-/* Cards with subtle festive border */
+/* Main content area */
+body.theme-christmas .app-main {
+  background: #0f140f;
+}
+
+/* Cards with festive accents */
 body.theme-christmas .card {
-  border: 1px solid #e8e0d8;
-  box-shadow: 0 2px 8px rgba(196, 30, 58, 0.08);
+  background: #1a1f1a;
+  border: 1px solid #2a352a;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 body.theme-christmas .card__header {
-  border-bottom-color: #e8e0d8;
+  border-bottom-color: #2a352a;
+}
+
+body.theme-christmas .card__footer {
+  border-top-color: #2a352a;
+  background: #0f140f;
 }
 
 /* Buttons */
 body.theme-christmas .btn--primary {
   background: linear-gradient(135deg, #c41e3a 0%, #a01830 100%);
   border-color: #8b0000;
+  color: #fff;
 }
 
 body.theme-christmas .btn--primary:hover {
   background: linear-gradient(135deg, #a01830 0%, #8b0000 100%);
 }
 
+body.theme-christmas .btn--secondary {
+  background: #2a352a;
+  border-color: #3a4a3a;
+  color: #c8dac8;
+}
+
+body.theme-christmas .btn--secondary:hover {
+  background: #3a4a3a;
+}
+
 body.theme-christmas .btn--success {
   background: linear-gradient(135deg, #228b22 0%, #1a6b1a 100%);
   border-color: #145214;
+  color: #fff;
+}
+
+body.theme-christmas .btn--ghost {
+  color: #9cb39c;
+}
+
+body.theme-christmas .btn--ghost:hover {
+  background: #2a352a;
+  color: #e0ebe0;
+}
+
+/* Form elements */
+body.theme-christmas .form-input,
+body.theme-christmas .form-select,
+body.theme-christmas .form-textarea {
+  background: #0f140f;
+  border-color: #3a4a3a;
+  color: #c8dac8;
+}
+
+body.theme-christmas .form-input:focus,
+body.theme-christmas .form-select:focus,
+body.theme-christmas .form-textarea:focus {
+  border-color: #e85a6f;
+  box-shadow: 0 0 0 3px rgba(232, 90, 111, 0.2);
+}
+
+body.theme-christmas .form-input::placeholder,
+body.theme-christmas .form-textarea::placeholder {
+  color: #6b8b6b;
+}
+
+body.theme-christmas .form-label {
+  color: #9cb39c;
+}
+
+body.theme-christmas .input-group__addon {
+  background: #2a352a;
+  border-color: #3a4a3a;
+  color: #9cb39c;
+}
+
+/* Cost breakdown */
+body.theme-christmas .cost-breakdown__label {
+  color: #9cb39c;
+}
+
+body.theme-christmas .cost-breakdown__value {
+  color: #c8dac8;
+}
+
+body.theme-christmas .cost-breakdown__divider {
+  border-top-color: #2a352a;
+}
+
+body.theme-christmas .cost-breakdown__total .cost-breakdown__value {
+  color: #e85a6f;
 }
 
 /* Stats cards */
 body.theme-christmas .stat-card {
+  background: #1a1f1a;
+  border-color: #2a352a;
   border-left: 4px solid #c41e3a;
 }
 
@@ -124,63 +233,27 @@ body.theme-christmas .stat-card:nth-child(3n) {
   border-left-color: #ffd700;
 }
 
-/* Cost breakdown total */
-body.theme-christmas .cost-breakdown__total .cost-breakdown__value {
-  color: #c41e3a;
+body.theme-christmas .stat-card__value {
+  color: #e0ebe0;
 }
 
-/* Form elements */
-body.theme-christmas .form-input:focus,
-body.theme-christmas .form-select:focus {
-  border-color: #c41e3a;
-  box-shadow: 0 0 0 3px rgba(196, 30, 58, 0.15);
+body.theme-christmas .stat-card__label {
+  color: #9cb39c;
 }
 
-/* Toggle button styling */
-body.theme-christmas .theme-toggle {
-  color: #ffd700;
+/* Modal */
+body.theme-christmas .modal__backdrop {
+  background: rgba(0, 0, 0, 0.75);
 }
 
-/* Snowfall animation */
-body.theme-christmas::before {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  background-image:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white' opacity='0.6'%3E%3Ccircle cx='12' cy='12' r='2'/%3E%3C/svg%3E"),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white' opacity='0.4'%3E%3Ccircle cx='12' cy='12' r='1.5'/%3E%3C/svg%3E"),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white' opacity='0.3'%3E%3Ccircle cx='12' cy='12' r='1'/%3E%3C/svg%3E");
-  background-size: 80px 80px, 60px 60px, 40px 40px;
-  background-position: 0 0, 30px 40px, 60px 20px;
-  animation: snowfall 20s linear infinite;
-  z-index: -1;
-  opacity: 0.7;
+body.theme-christmas .modal {
+  background: #1a1f1a;
+  border: 1px solid #2a352a;
 }
 
-@keyframes snowfall {
-  0% {
-    background-position: 0 0, 30px 40px, 60px 20px;
-  }
-  100% {
-    background-position: 0 100vh, 30px calc(100vh + 40px), 60px calc(100vh + 20px);
-  }
-}
-
-/* Subtle holly decoration on page headers */
-body.theme-christmas .page-header__title::before {
-  content: '🎄';
-  margin-right: 0.5rem;
-  font-size: 0.8em;
-}
-
-/* Modal styling */
 body.theme-christmas .modal__header {
   background: linear-gradient(135deg, #c41e3a 0%, #a01830 100%);
-  color: #fff;
+  border-bottom-color: #2a352a;
 }
 
 body.theme-christmas .modal__title {
@@ -196,39 +269,155 @@ body.theme-christmas .modal__close:hover {
   background: rgba(255, 255, 255, 0.15);
 }
 
+body.theme-christmas .modal__footer {
+  border-top-color: #2a352a;
+  background: #0f140f;
+}
+
+/* Tables */
+body.theme-christmas table {
+  border-color: #2a352a;
+}
+
+body.theme-christmas th {
+  background: #0f140f;
+  color: #9cb39c;
+  border-color: #2a352a;
+}
+
+body.theme-christmas td {
+  border-color: #2a352a;
+  color: #c8dac8;
+}
+
+body.theme-christmas tr:hover {
+  background: #0f140f;
+}
+
 /* Toast notifications */
+body.theme-christmas .toast {
+  background: #2a352a;
+  color: #e0ebe0;
+  border-color: #3a4a3a;
+}
+
 body.theme-christmas .toast--success {
-  background: #228b22;
-  border-left-color: #145214;
+  background: #1a3d2a;
+  border-left-color: #228b22;
 }
 
 /* Progress bars / wear indicators */
+body.theme-christmas .progress {
+  background: #2a352a;
+}
+
 body.theme-christmas .progress__fill {
   background: linear-gradient(90deg, #228b22 0%, #c41e3a 100%);
 }
 
+/* Page header */
+body.theme-christmas .page-header__title {
+  color: #e0ebe0;
+}
+
+body.theme-christmas .page-header__description {
+  color: #9cb39c;
+}
+
+/* Subtle holly decoration on page headers */
+body.theme-christmas .page-header__title::before {
+  content: '🎄';
+  margin-right: 0.5rem;
+  font-size: 0.8em;
+}
+
+/* Empty state */
+body.theme-christmas .empty-state {
+  color: #6b8b6b;
+}
+
+/* Dividers */
+body.theme-christmas hr {
+  border-color: #2a352a;
+}
+
 /* Festive link colors */
 body.theme-christmas a:not(.btn):not(.app-nav__link) {
-  color: #c41e3a;
+  color: #e85a6f;
 }
 
 body.theme-christmas a:not(.btn):not(.app-nav__link):hover {
-  color: #8b0000;
+  color: #ff8a9a;
 }
 
 /* Badge colors */
+body.theme-christmas .badge {
+  background: #2a352a;
+  color: #c8dac8;
+}
+
 body.theme-christmas .badge--primary {
   background: #c41e3a;
+  color: #fff;
 }
 
 body.theme-christmas .badge--success {
   background: #228b22;
+  color: #fff;
+}
+
+/* Scrollbar */
+body.theme-christmas ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+body.theme-christmas ::-webkit-scrollbar-track {
+  background: #1a1f1a;
+}
+
+body.theme-christmas ::-webkit-scrollbar-thumb {
+  background: #3a4a3a;
+  border-radius: 4px;
+}
+
+body.theme-christmas ::-webkit-scrollbar-thumb:hover {
+  background: #4a5a4a;
+}
+
+/* Snowfall animation */
+body.theme-christmas::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white' opacity='0.5'%3E%3Ccircle cx='12' cy='12' r='2'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white' opacity='0.3'%3E%3Ccircle cx='12' cy='12' r='1.5'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white' opacity='0.2'%3E%3Ccircle cx='12' cy='12' r='1'/%3E%3C/svg%3E");
+  background-size: 80px 80px, 60px 60px, 40px 40px;
+  background-position: 0 0, 30px 40px, 60px 20px;
+  animation: snowfall 20s linear infinite;
+  z-index: -1;
+  opacity: 0.6;
+}
+
+@keyframes snowfall {
+  0% {
+    background-position: 0 0, 30px 40px, 60px 20px;
+  }
+  100% {
+    background-position: 0 100vh, 30px calc(100vh + 40px), 60px calc(100vh + 20px);
+  }
 }
 
 /* Reduce motion for accessibility */
 @media (prefers-reduced-motion: reduce) {
   body.theme-christmas::before {
     animation: none;
-    opacity: 0.3;
+    opacity: 0.2;
   }
 }
