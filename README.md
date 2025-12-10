@@ -14,6 +14,7 @@ A web-based tool for calculating the true cost of FDM 3D prints, including filam
 
 - **Accurate Cost Calculation** — Accounts for all cost factors: filament, electricity, depreciation, consumables, labor, failure rate, and markup
 - **G-code Parsing** — Auto-extract print time and filament usage from slicer files
+- **Printer Presets** — Quick setup with presets for Bambu Lab, Prusa, Creality, Anycubic, and Voron printers
 - **Multiple Profiles** — Manage multiple printers and filament types
 - **Consumable Tracking** — Track wear on nozzles, beds, belts, and other parts with replacement alerts
 - **Location-Based Rates** — Pre-configured electricity rates for 50+ regions worldwide
@@ -21,6 +22,7 @@ A web-based tool for calculating the true cost of FDM 3D prints, including filam
 - **Print History** — Save and track all your print calculations
 - **Dashboard Analytics** — Visualize spending trends and cost breakdowns
 - **Privacy First** — All data stored locally in your browser, nothing sent to servers
+- **Accessible** — WCAG 2.1 Level AA compliant for keyboard and screen reader users
 - **No Installation** — Pure HTML/CSS/JS, runs in any modern browser
 
 ## Quick Start
