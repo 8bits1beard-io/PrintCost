@@ -13,7 +13,8 @@ A web-based tool for calculating the true cost of FDM 3D prints, including filam
 ## Features
 
 - **Accurate Cost Calculation** — Accounts for all cost factors: filament, electricity, depreciation, consumables, labor, failure rate, and markup
-- **G-code Parsing** — Auto-extract print time and filament usage from slicer files
+- **Multi-Filament Support** — Calculate costs for multi-color prints with different filament types
+- **AMS Support** — Track Bambu Lab AMS power consumption and depreciation
 - **Printer Presets** — Quick setup with presets for Bambu Lab, Prusa, Creality, Anycubic, and Voron printers
 - **Multiple Profiles** — Manage multiple printers and filament types
 - **Consumable Tracking** — Track wear on nozzles, beds, belts, and other parts with replacement alerts
@@ -35,10 +36,14 @@ A web-based tool for calculating the true cost of FDM 3D prints, including filam
 
 ## Changelog
 
+### v1.1.0
+- Multi-filament support for multi-color prints
+- AMS support (power consumption and depreciation tracking)
+- Removed G-code parsing (enter values manually from your slicer)
+
 ### v1.0.0
 - Initial release
 - Cost calculator with filament, electricity, depreciation, consumables, labor, failure rate, and markup
-- G-code parsing for PrusaSlicer, Cura, SuperSlicer, OrcaSlicer, Bambu Studio
 - Printer presets for Bambu Lab, Prusa, Creality, Anycubic, Voron
 - Printer and filament profile management
 - Consumable tracking with wear indicators
@@ -87,12 +92,13 @@ This example walks through setting up a printer, adding two filaments, and calcu
 ### Step 3: Calculate a Print
 
 1. Go to **Calculator**
-2. Either upload a G-code file (drag & drop) or enter manually:
-   - Print Time: `2 hours 30 minutes`
-   - Filament Used: `45g`
-3. Select your printer and filament
-4. Adjust settings if needed (failure rate, markup for selling)
-5. View the cost breakdown
+2. Enter print details from your slicer:
+   - Print Time: `150 minutes` (2h 30m)
+   - Add each filament used and its weight in grams
+3. Select your printer
+4. Click "Add Filament" for multi-color prints to add more filaments
+5. Adjust settings if needed (failure rate, markup for selling)
+6. View the cost breakdown
 
 ### Example Result
 
@@ -112,7 +118,7 @@ For a 2.5 hour print using 45g of PLA ($18/kg):
 ```mermaid
 flowchart LR
     A[Add Printer] --> B[Add Filaments]
-    B --> C[Upload G-code<br/>or Enter Manually]
+    B --> C[Enter Print Details]
     C --> D[View Cost<br/>Breakdown]
     D --> E[Save to History]
     D --> F[Compare Options]
@@ -139,20 +145,6 @@ TOTAL            = Subtotal + Failure Buffer + Markup
 ### Why Include Failure Rate?
 
 A 5% failure rate means 1 in 20 prints fails. The failure buffer accounts for wasted material and time from failed prints, giving you a more realistic cost per successful print.
-
-## Supported Slicers
-
-3DPCC can parse G-code from these slicers to auto-fill print time and filament usage:
-
-| Slicer | Supported | Notes |
-|--------|-----------|-------|
-| PrusaSlicer | Yes | Metadata in file footer |
-| SuperSlicer | Yes | Same format as PrusaSlicer |
-| OrcaSlicer | Yes | Same format as PrusaSlicer |
-| Bambu Studio | Yes | Same format as PrusaSlicer |
-| Cura | Yes | Metadata in file header |
-
-Don't see your slicer? You can always enter values manually.
 
 ## Electricity Rates
 

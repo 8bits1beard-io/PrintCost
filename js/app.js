@@ -405,28 +405,14 @@ const App = {
             <h3 class="card__title">Print Details</h3>
           </div>
           <div class="card__body">
-            <!-- G-code Upload -->
-            <div class="dropzone mb-4" id="gcode-dropzone">
-              <svg class="dropzone__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-              <div class="dropzone__text">Drop G-code file here or click to browse</div>
-              <div class="dropzone__hint">Supports PrusaSlicer, Cura, SuperSlicer</div>
-            </div>
-            <input type="file" id="gcode-file" accept=".gcode,.gco,.g" style="display:none">
-
             <div class="form-group">
               <label class="form-label">Job Name</label>
               <input type="text" class="form-input" id="calc-name" placeholder="My Print">
             </div>
 
-            <div class="grid grid--2">
-              <div class="form-group">
-                <label class="form-label form-label--required">Print Time (minutes)</label>
-                <input type="number" class="form-input" id="calc-time" min="0" step="1" value="60">
-              </div>
-              <div class="form-group">
-                <label class="form-label form-label--required">Filament (grams)</label>
-                <input type="number" class="form-input" id="calc-grams" min="0" step="0.1" value="20">
-              </div>
+            <div class="form-group">
+              <label class="form-label form-label--required">Print Time (minutes)</label>
+              <input type="number" class="form-input" id="calc-time" min="0" step="1" value="60">
             </div>
 
             <div class="form-group">
@@ -438,11 +424,14 @@ const App = {
             </div>
 
             <div class="form-group">
-              <label class="form-label form-label--required">Filament</label>
-              <select class="form-select" id="calc-filament">
-                ${filaments.length === 0 ? '<option value="">No filaments - add one first</option>' : ''}
-                ${filaments.map(f => `<option value="${f.id}">${Helpers.escapeHtml(f.getDisplayName())} (${Formatters.pricePerGram(f.getPricePerGram())})</option>`).join('')}
-              </select>
+              <label class="form-label form-label--required">Filaments Used</label>
+              <div id="calc-filaments-list">
+                <!-- Filament entries will be added here dynamically -->
+              </div>
+              <button type="button" class="btn btn--ghost btn--sm mt-2" id="btn-add-filament">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                Add Filament
+              </button>
             </div>
 
             <hr class="my-4">
@@ -519,33 +508,12 @@ const App = {
   },
 
   initCalculatorEvents() {
-    const dropzone = document.getElementById('gcode-dropzone');
-    const fileInput = document.getElementById('gcode-file');
+    // Add initial filament row
+    this.addFilamentRow();
 
-    // Dropzone click
-    dropzone.addEventListener('click', () => fileInput.click());
-
-    // Drag and drop
-    dropzone.addEventListener('dragover', (e) => {
-      e.preventDefault();
-      dropzone.classList.add('dragover');
-    });
-
-    dropzone.addEventListener('dragleave', () => {
-      dropzone.classList.remove('dragover');
-    });
-
-    dropzone.addEventListener('drop', (e) => {
-      e.preventDefault();
-      dropzone.classList.remove('dragover');
-      const file = e.dataTransfer.files[0];
-      if (file) this.handleGcodeFile(file);
-    });
-
-    // File input change
-    fileInput.addEventListener('change', (e) => {
-      const file = e.target.files[0];
-      if (file) this.handleGcodeFile(file);
+    // Add filament button
+    document.getElementById('btn-add-filament').addEventListener('click', () => {
+      this.addFilamentRow();
     });
 
     // Calculate button
@@ -559,102 +527,97 @@ const App = {
     });
   },
 
-  async handleGcodeFile(file) {
-    try {
-      const content = await Helpers.readFileAsText(file);
+  filamentRowCount: 0,
 
-      // Parse the G-code
-      const parseResult = gcodeParser.parse(content);
+  addFilamentRow() {
+    const container = document.getElementById('calc-filaments-list');
+    const filaments = storage.getFilaments();
+    const rowId = this.filamentRowCount++;
 
-      if (!parseResult.success) {
-        this.showToast('Failed to parse G-code file', 'error');
-        return;
-      }
+    const row = document.createElement('div');
+    row.className = 'filament-row flex gap-2 mb-2';
+    row.dataset.rowId = rowId;
+    row.innerHTML = `
+      <select class="form-select" style="flex: 2;" data-filament-select="${rowId}">
+        ${filaments.length === 0 ? '<option value="">No filaments - add one first</option>' : ''}
+        ${filaments.map(f => `<option value="${f.id}">${Helpers.escapeHtml(f.getDisplayName())} (${Formatters.pricePerGram(f.getPricePerGram())})</option>`).join('')}
+      </select>
+      <div class="input-group" style="flex: 1;">
+        <input type="number" class="form-input" data-filament-grams="${rowId}" min="0" step="0.1" value="20" placeholder="g">
+        <span class="input-group__addon">g</span>
+      </div>
+      <button type="button" class="btn btn--ghost btn--sm" onclick="App.removeFilamentRow(${rowId})" title="Remove" ${this.filamentRowCount <= 1 ? 'style="visibility: hidden;"' : ''}>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    `;
 
-      // Set the job name from filename
-      document.getElementById('calc-name').value = file.name.replace(/\.(gcode|gco|g)$/i, '');
+    container.appendChild(row);
+    this.updateFilamentRemoveButtons();
+  },
 
-      // Fill in parsed values
-      if (parseResult.printTimeMinutes) {
-        document.getElementById('calc-time').value = Math.round(parseResult.printTimeMinutes);
-      }
-
-      if (parseResult.filamentUsedGrams) {
-        document.getElementById('calc-grams').value = parseResult.filamentUsedGrams.toFixed(1);
-      }
-
-      // Store parse result for display
-      this.lastGcodeResult = parseResult;
-
-      // Show success message with detected slicer
-      this.showToast(`Parsed ${parseResult.slicerName} G-code`, 'success');
-
-      // Update the dropzone to show parsed info
-      this.displayGcodeInfo(parseResult, file.name);
-
-    } catch (err) {
-      console.error('G-code parsing error:', err);
-      this.showToast('Failed to read G-code file', 'error');
+  removeFilamentRow(rowId) {
+    const row = document.querySelector(`.filament-row[data-row-id="${rowId}"]`);
+    if (row) {
+      row.remove();
+      this.updateFilamentRemoveButtons();
     }
   },
 
-  displayGcodeInfo(parseResult, filename) {
-    const dropzone = document.getElementById('gcode-dropzone');
-
-    const timeStr = parseResult.printTimeMinutes
-      ? Formatters.time(parseResult.printTimeMinutes)
-      : 'Unknown';
-
-    const weightStr = parseResult.filamentUsedGrams
-      ? Formatters.weight(parseResult.filamentUsedGrams)
-      : 'Unknown';
-
-    const filamentType = parseResult.filamentType || 'Unknown';
-
-    dropzone.innerHTML = `
-      <div class="flex items-center gap-3" style="text-align: left; width: 100%;">
-        <svg class="dropzone__icon" style="width: 32px; height: 32px; margin: 0; color: var(--color-success);" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-        <div style="flex: 1;">
-          <div class="font-semibold">${Helpers.escapeHtml(filename)}</div>
-          <div class="text-sm text-gray-500">
-            ${parseResult.slicerName} · ${timeStr} · ${weightStr} · ${filamentType}
-          </div>
-        </div>
-        <button class="btn btn--ghost btn--sm" onclick="App.clearGcode(event)" title="Clear">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-        </button>
-      </div>
-    `;
+  updateFilamentRemoveButtons() {
+    const rows = document.querySelectorAll('.filament-row');
+    rows.forEach((row, index) => {
+      const removeBtn = row.querySelector('button');
+      if (removeBtn) {
+        // Hide remove button if only one row
+        removeBtn.style.visibility = rows.length <= 1 ? 'hidden' : 'visible';
+      }
+    });
   },
 
-  clearGcode(event) {
-    if (event) event.stopPropagation();
+  getFilamentEntries() {
+    const rows = document.querySelectorAll('.filament-row');
+    const entries = [];
 
-    this.lastGcodeResult = null;
-    document.getElementById('gcode-file').value = '';
+    rows.forEach(row => {
+      const rowId = row.dataset.rowId;
+      const select = row.querySelector(`[data-filament-select="${rowId}"]`);
+      const gramsInput = row.querySelector(`[data-filament-grams="${rowId}"]`);
 
-    const dropzone = document.getElementById('gcode-dropzone');
-    dropzone.innerHTML = `
-      <svg class="dropzone__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-      <div class="dropzone__text">Drop G-code file here or click to browse</div>
-      <div class="dropzone__hint">Supports PrusaSlicer, Cura, SuperSlicer, OrcaSlicer</div>
-    `;
+      if (select && gramsInput && select.value) {
+        const filament = storage.getFilament(select.value);
+        const grams = Helpers.parseNumber(gramsInput.value, 0);
+
+        if (filament && grams > 0) {
+          entries.push({
+            filament,
+            grams,
+          });
+        }
+      }
+    });
+
+    return entries;
   },
 
   calculateCost() {
     const printerId = document.getElementById('calc-printer').value;
-    const filamentId = document.getElementById('calc-filament').value;
 
-    if (!printerId || !filamentId) {
-      this.showToast('Please select a printer and filament', 'error');
+    if (!printerId) {
+      this.showToast('Please select a printer', 'error');
+      return;
+    }
+
+    const filamentEntries = this.getFilamentEntries();
+
+    if (filamentEntries.length === 0) {
+      this.showToast('Please add at least one filament with grams > 0', 'error');
       return;
     }
 
     const printer = storage.getPrinter(printerId);
-    const filament = storage.getFilament(filamentId);
 
-    if (!printer || !filament) {
-      this.showToast('Invalid printer or filament selection', 'error');
+    if (!printer) {
+      this.showToast('Invalid printer selection', 'error');
       return;
     }
 
@@ -662,10 +625,9 @@ const App = {
 
     const params = {
       printer,
-      filament,
+      filamentEntries,
       consumables,
       printTimeMinutes: Helpers.parseNumber(document.getElementById('calc-time').value, 0),
-      filamentGrams: Helpers.parseNumber(document.getElementById('calc-grams').value, 0),
       electricityRate: Helpers.parseNumber(document.getElementById('calc-electricity').value, 0.15),
       failureRate: Helpers.parseNumber(document.getElementById('calc-failure').value, 5) / 100,
       laborHourlyRate: Helpers.parseNumber(document.getElementById('calc-labor-rate').value, 0),
@@ -682,15 +644,54 @@ const App = {
     const container = document.getElementById('calc-results');
     const formatted = costCalculator.formatResult(result);
 
-    container.innerHTML = `
-      <div class="cost-breakdown">
+    // Build filament rows - show details if multiple filaments used
+    const filamentItems = result.breakdown.filament.items || [];
+    let filamentRows = '';
+
+    if (filamentItems.length > 1) {
+      // Multiple filaments - show each one
+      filamentRows = filamentItems.map((f, i) => `
+        <div class="cost-breakdown__row cost-breakdown__row--indent">
+          <span class="cost-breakdown__label">
+            <span class="cost-breakdown__dot" style="background-color: ${f.colorHex || CONFIG.CHART_COLORS.filament}"></span>
+            ${Helpers.escapeHtml(f.name)} (${Formatters.weight(f.grams)})
+          </span>
+          <span class="cost-breakdown__value">${CONFIG.formatCurrency(f.cost)}</span>
+        </div>
+      `).join('');
+
+      // Add subtotal row for filament
+      filamentRows = `
         <div class="cost-breakdown__row">
           <span class="cost-breakdown__label">
             <span class="cost-breakdown__dot" style="background-color: ${CONFIG.CHART_COLORS.filament}"></span>
-            Filament (${Formatters.weight(result.breakdown.filament.grams)})
+            Filament (${Formatters.weight(result.breakdown.filament.grams)} total)
           </span>
           <span class="cost-breakdown__value">${formatted.filament}</span>
         </div>
+        ${filamentRows}
+      `;
+    } else {
+      // Single filament
+      const singleFilament = filamentItems[0];
+      const filamentLabel = singleFilament
+        ? `${Helpers.escapeHtml(singleFilament.name)} (${Formatters.weight(singleFilament.grams)})`
+        : `Filament (${Formatters.weight(result.breakdown.filament.grams)})`;
+
+      filamentRows = `
+        <div class="cost-breakdown__row">
+          <span class="cost-breakdown__label">
+            <span class="cost-breakdown__dot" style="background-color: ${singleFilament?.colorHex || CONFIG.CHART_COLORS.filament}"></span>
+            ${filamentLabel}
+          </span>
+          <span class="cost-breakdown__value">${formatted.filament}</span>
+        </div>
+      `;
+    }
+
+    container.innerHTML = `
+      <div class="cost-breakdown">
+        ${filamentRows}
         <div class="cost-breakdown__row">
           <span class="cost-breakdown__label">
             <span class="cost-breakdown__dot" style="background-color: ${CONFIG.CHART_COLORS.electricity}"></span>

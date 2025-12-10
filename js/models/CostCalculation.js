@@ -14,10 +14,9 @@ class CostCalculation {
    * Calculate complete print cost
    * @param {Object} params - Calculation parameters
    * @param {Printer} params.printer - Printer profile
-   * @param {Filament} params.filament - Filament profile
+   * @param {Array} params.filamentEntries - Array of {filament, grams} objects
    * @param {Consumable[]} params.consumables - Array of consumables
    * @param {number} params.printTimeMinutes - Print time in minutes
-   * @param {number} params.filamentGrams - Filament usage in grams
    * @param {number} params.electricityRate - Electricity rate ($/kWh)
    * @param {number} params.failureRate - Failure rate (0-1)
    * @param {number} params.laborHourlyRate - Labor rate ($/hour)
@@ -28,10 +27,9 @@ class CostCalculation {
   calculate(params) {
     const {
       printer,
-      filament,
+      filamentEntries = [],
       consumables = [],
       printTimeMinutes,
-      filamentGrams,
       electricityRate = this.electricityRate,
       failureRate = CONFIG.DEFAULTS.FAILURE_RATE,
       laborHourlyRate = 0,
@@ -41,8 +39,29 @@ class CostCalculation {
 
     const printTimeHours = printTimeMinutes / 60;
 
-    // 1. Filament cost
-    const filamentCost = filamentGrams * filament.getPricePerGram();
+    // 1. Filament costs (multiple filaments supported)
+    let totalFilamentCost = 0;
+    let totalFilamentGrams = 0;
+    const filamentBreakdown = [];
+
+    for (const entry of filamentEntries) {
+      const { filament, grams } = entry;
+      const cost = grams * filament.getPricePerGram();
+      totalFilamentCost += cost;
+      totalFilamentGrams += grams;
+      filamentBreakdown.push({
+        id: filament.id,
+        name: filament.getDisplayName(),
+        material: filament.material,
+        color: filament.color,
+        colorHex: filament.colorHex,
+        grams: grams,
+        pricePerGram: filament.getPricePerGram(),
+        cost: cost,
+      });
+    }
+
+    const filamentCost = totalFilamentCost;
 
     // 2. Electricity cost (includes AMS if attached)
     let powerWatts = printer.powerConsumption.printing;
@@ -111,8 +130,8 @@ class CostCalculation {
       // Detailed breakdown
       breakdown: {
         filament: {
-          grams: filamentGrams,
-          pricePerGram: filament.getPricePerGram(),
+          grams: totalFilamentGrams,
+          items: filamentBreakdown,
           cost: filamentCost,
         },
         electricity: {
@@ -158,14 +177,14 @@ class CostCalculation {
       // Input parameters (for reference/saving)
       params: {
         printTimeMinutes,
-        filamentGrams,
+        filamentGrams: totalFilamentGrams,
         electricityRate,
         failureRate,
         laborHourlyRate,
         laborHours,
         markupPercent,
         printerId: printer.id,
-        filamentId: filament.id,
+        filamentEntries: filamentBreakdown.map(f => ({ id: f.id, grams: f.grams })),
         consumableIds: consumables.map(c => c.id),
       },
     };

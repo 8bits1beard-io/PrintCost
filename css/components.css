@@ -733,6 +733,16 @@
   color: var(--color-primary);
 }
 
+.cost-breakdown__row--indent {
+  padding-left: var(--spacing-6);
+  font-size: var(--font-size-sm);
+}
+
+.cost-breakdown__row--indent .cost-breakdown__dot {
+  width: 8px;
+  height: 8px;
+}
+
 /* ==========================================================================
    Color Swatch
    ========================================================================== */
