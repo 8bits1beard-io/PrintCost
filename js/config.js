@@ -174,6 +174,38 @@ const CONFIG = {
       estimatedLifetimeHours: 5000,
       buildVolume: '180 x 180 x 180 mm',
     },
+    'bambu-p2s': {
+      name: 'P2S',
+      manufacturer: 'Bambu Lab',
+      model: 'P2S',
+      powerConsumption: { printing: 120, idle: 10, heated: 350 },
+      estimatedLifetimeHours: 5000,
+      buildVolume: '256 x 256 x 256 mm',
+    },
+    'bambu-h2d': {
+      name: 'H2D',
+      manufacturer: 'Bambu Lab',
+      model: 'H2D',
+      powerConsumption: { printing: 200, idle: 20, heated: 1650 },
+      estimatedLifetimeHours: 5000,
+      buildVolume: '350 x 320 x 325 mm',
+    },
+    'bambu-h2s': {
+      name: 'H2S',
+      manufacturer: 'Bambu Lab',
+      model: 'H2S',
+      powerConsumption: { printing: 180, idle: 20, heated: 1400 },
+      estimatedLifetimeHours: 5000,
+      buildVolume: '340 x 320 x 340 mm',
+    },
+    'bambu-h2c': {
+      name: 'H2C',
+      manufacturer: 'Bambu Lab',
+      model: 'H2C',
+      powerConsumption: { printing: 200, idle: 20, heated: 1500 },
+      estimatedLifetimeHours: 5000,
+      buildVolume: '350 x 320 x 325 mm',
+    },
     // Prusa
     'prusa-mk4': {
       name: 'MK4',
