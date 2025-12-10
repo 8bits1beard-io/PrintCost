@@ -124,6 +124,7 @@ const CONFIG = {
   },
 
   // Printer presets (power in watts, lifetime in hours)
+  // Bambu Lab power specs from: https://wiki.bambulab.com/en/general/power-consumption
   PRINTER_PRESETS: {
     // Bambu Lab
     'bambu-x1-carbon': {
