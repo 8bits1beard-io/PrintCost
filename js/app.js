@@ -1448,13 +1448,15 @@ const App = {
 
   showModal(title, content, options = {}) {
     const container = document.getElementById('modal-container');
+    this._modalHasChanges = false;
+    this._modalConfirmClose = options.confirmClose ?? false;
 
     container.innerHTML = `
       <div class="modal-backdrop open" id="modal-backdrop">
         <div class="modal ${options.size ? `modal--${options.size}` : ''}">
           <div class="modal__header">
             <h2 class="modal__title">${title}</h2>
-            <button class="modal__close" onclick="App.closeModal()">
+            <button class="modal__close" onclick="App.tryCloseModal()">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
             </button>
           </div>
@@ -1466,22 +1468,38 @@ const App = {
       </div>
     `;
 
-    // Close on backdrop click
-    document.getElementById('modal-backdrop').addEventListener('click', (e) => {
-      if (e.target.id === 'modal-backdrop') {
+    // Track changes in form inputs
+    if (options.confirmClose) {
+      container.querySelectorAll('input, select, textarea').forEach(el => {
+        el.addEventListener('input', () => { this._modalHasChanges = true; });
+        el.addEventListener('change', () => { this._modalHasChanges = true; });
+      });
+    }
+
+    // Do NOT close on backdrop click - modal stays open until explicitly closed
+    // (removed backdrop click handler)
+
+    // Close on Escape key (with confirmation if needed)
+    document.addEventListener('keydown', this._escapeHandler = (e) => {
+      if (e.key === 'Escape') this.tryCloseModal();
+    });
+  },
+
+  tryCloseModal() {
+    if (this._modalConfirmClose && this._modalHasChanges) {
+      if (confirm('You have unsaved changes. Are you sure you want to close?')) {
         this.closeModal();
       }
-    });
-
-    // Close on Escape key
-    document.addEventListener('keydown', this._escapeHandler = (e) => {
-      if (e.key === 'Escape') this.closeModal();
-    });
+    } else {
+      this.closeModal();
+    }
   },
 
   closeModal() {
     const container = document.getElementById('modal-container');
     container.innerHTML = '';
+    this._modalHasChanges = false;
+    this._modalConfirmClose = false;
     document.removeEventListener('keydown', this._escapeHandler);
   },
 
@@ -1586,11 +1604,11 @@ const App = {
     `;
 
     const footer = `
-      <button class="btn btn--secondary" onclick="App.closeModal()">Cancel</button>
+      <button class="btn btn--secondary" onclick="App.tryCloseModal()">Cancel</button>
       <button class="btn btn--primary" onclick="App.saveSettings()">Save Settings</button>
     `;
 
-    this.showModal('Settings', content, { footer });
+    this.showModal('Settings', content, { footer, confirmClose: true });
 
     // Update rate when location changes
     document.getElementById('settings-location').addEventListener('change', (e) => {
@@ -1769,11 +1787,11 @@ const App = {
     `;
 
     const footer = `
-      <button class="btn btn--secondary" onclick="App.closeModal()">Cancel</button>
+      <button class="btn btn--secondary" onclick="App.tryCloseModal()">Cancel</button>
       <button class="btn btn--primary" onclick="App.savePrinter('${printer.id}')">${isEdit ? 'Save Changes' : 'Add Printer'}</button>
     `;
 
-    this.showModal(isEdit ? 'Edit Printer' : 'Add Printer', content, { footer, size: 'lg' });
+    this.showModal(isEdit ? 'Edit Printer' : 'Add Printer', content, { footer, size: 'lg', confirmClose: true });
 
     // AMS checkbox toggle
     document.getElementById('printer-has-ams').addEventListener('change', (e) => {
@@ -1959,11 +1977,11 @@ const App = {
     `;
 
     const footer = `
-      <button class="btn btn--secondary" onclick="App.closeModal()">Cancel</button>
+      <button class="btn btn--secondary" onclick="App.tryCloseModal()">Cancel</button>
       <button class="btn btn--primary" onclick="App.saveFilament('${filament.id}')">${isEdit ? 'Save Changes' : 'Add Filament'}</button>
     `;
 
-    this.showModal(isEdit ? 'Edit Filament' : 'Add Filament', content, { footer, size: 'lg' });
+    this.showModal(isEdit ? 'Edit Filament' : 'Add Filament', content, { footer, size: 'lg', confirmClose: true });
 
     // Update density when material changes
     document.getElementById('filament-material').addEventListener('change', (e) => {
@@ -2072,11 +2090,11 @@ const App = {
     `;
 
     const footer = `
-      <button class="btn btn--secondary" onclick="App.closeModal()">Cancel</button>
+      <button class="btn btn--secondary" onclick="App.tryCloseModal()">Cancel</button>
       <button class="btn btn--primary" onclick="App.saveConsumable('${consumable.id}')">${isEdit ? 'Save Changes' : 'Add Consumable'}</button>
     `;
 
-    this.showModal(isEdit ? 'Edit Consumable' : 'Add Consumable', content, { footer });
+    this.showModal(isEdit ? 'Edit Consumable' : 'Add Consumable', content, { footer, confirmClose: true });
 
     // Update defaults when type changes
     document.getElementById('consumable-type').addEventListener('change', (e) => {
