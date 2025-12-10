@@ -5,7 +5,7 @@
 A web-based tool for calculating the true cost of FDM 3D prints, including filament, electricity, printer depreciation, consumable wear, and more.
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
-![Version](https://img.shields.io/badge/version-1.2.0-green.svg)
+![Version](https://img.shields.io/badge/version-1.3.0-green.svg)
 ![No Dependencies](https://img.shields.io/badge/dependencies-Chart.js%20only-orange.svg)
 
 ---
@@ -13,6 +13,7 @@ A web-based tool for calculating the true cost of FDM 3D prints, including filam
 ## Features
 
 - **Accurate Cost Calculation** — Accounts for all cost factors: filament, electricity, depreciation, consumables, labor, failure rate, and markup
+- **Profit/Loss Calculator** — Enter a selling price to see your profit or loss instantly
 - **Multi-Filament Support** — Calculate costs for multi-color prints with different filament types
 - **AMS Support** — Track Bambu Lab AMS power consumption and depreciation
 - **Printer Presets** — Quick setup with presets for Bambu Lab, Prusa, Creality, Anycubic, and Voron printers
@@ -36,6 +37,11 @@ A web-based tool for calculating the true cost of FDM 3D prints, including filam
 5. Start calculating!
 
 ## Changelog
+
+### v1.3.0
+- Profit/loss calculator with selling price field
+- Tooltips on all calculator fields for guidance
+- Improved UI with text labels for header buttons
 
 ### v1.2.0
 - Dark mode and Christmas theme with theme toggle
